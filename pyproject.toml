@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "github-merge-queue-simulator"
+version = "0.1.0"
+description = "GitHub merge queue simulator."
+authors = ["Michal Szelag <michal.szelag@sonos.com>"]
+
+packages = [
+    { include = "sonos" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.scripts]
+simulate = "sonos.github_merge_queue_simulator.simulator:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
