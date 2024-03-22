@@ -5,7 +5,7 @@ import logging
 import argparse
 import statistics
 
-logging.basicConfig(level=logging.INFO, format='[%(levelname)7s] - %(message)s')
+logging.basicConfig(level=logging.INFO, format='  %(message)s')
 logger = logging.getLogger(__name__)
 
 

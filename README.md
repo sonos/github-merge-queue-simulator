@@ -20,7 +20,21 @@ poetry install
 
 Run a simulation representing 250 hours of job executions, using queue sizes ranging from 5 to 10, where each job takes 30 minutes to execute, with a failure rate of 10%.
 ```shell
-poetry run simulate --sim-duration 250 --min-queue-size 5 --max-queue-size 10 --job-duration 30 --failure-rate 0.1 
+poetry run simulate --sim-duration 250 --min-queue-size 5 --max-queue-size 10 --job-duration 30 --failure-rate 0.1
+```
+```
+  Simulation duration: 250h
+  Job duration: 30m
+  Failure rate: 0.1
+  
+  Q Size | Throughput (PR/h) | Avg Time to Merge (m) | Median Time to Merge (m)
+  -------|-------------------|-----------------------|-------------------------
+  5      | 7.4               | 48.0                  | 30.0                   
+  6      | 8.2               | 55.0                  | 30.0                   
+  7      | 9.5               | 60.2                  | 30.0                   
+  8      | 10.1              | 68.7                  | 34.3                   
+  9      | 10.9              | 75.7                  | 45.0                   
+  10     | 12.1              | 82.7                  | 42.9
 ```
 
 ## Assumptions
