@@ -19,7 +19,7 @@ def simulate_throughput(queue_size: int, sim_duration: int, job_duration: int, f
         failure_rate (float): Probability of a job failing expressed as a number between 0 and 1
 
     Returns:
-        tuple: a tuple containing throughput of jobs per hour, average time to merge in minutes
+        tuple: a tuple containing throughput of jobs per hour, average time to merge in minutes, and median time to merge in minutes
     """
     total_jobs_completed = 0
     total_time = 0
