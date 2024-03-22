@@ -23,7 +23,6 @@ def simulate_throughput(queue_size: int, sim_duration: int, job_duration: int, f
     """
     total_jobs_completed = 0
     total_time = 0
-    #iterations = 0
     
     # track a list of all wait times per iteration
     wait_times = []
@@ -48,8 +47,6 @@ def simulate_throughput(queue_size: int, sim_duration: int, job_duration: int, f
         
         # increment by job execution time
         total_time += job_duration
-
-        #iterations += 1
 
         # can't divide by zero, this happens if the first jobs gets bounced and displaces all jobs, ignore that case
         if jobs_completed > 0:
