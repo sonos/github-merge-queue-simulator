@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo.png"/>
+</p>
+<h2 align="center">GitHub Merge Queue Simulator</h2>
 
 ## Overview
 Welcome to GitHub merge queue simulator.  This tool is designed to model the behavior of GitHub's merge queue and provide guidance on how to dial in various settings to optimize for throughput while balancing wait time and load on CI resources.
