@@ -14,7 +14,7 @@ To use this tool effectively you need to know a few things about your PR workloa
 
 Once you have a good handle on what these numbers are, you can start simulating queue behavior.
 
-Merge queue simulator is a python script that runs a large number of iterations which are meant to model GitHub's merge queue behavior using queue size, probability of failure, and randomly selecting queue position to fail a job.  The longer the duration, the more stable the predictions tend to be.  The tool computes PR throughput by tracking the number of successful PR moving through the queue over actual execution time (the last iteration may exceed allowed simulation duration).  Average wait time is computed using [Little's Law](https://en.wikipedia.org/wiki/Little%27s_law).
+Merge queue simulator is a python script that runs a large number of iterations to model GitHub's merge queue behavior using queue size, probability of failure, wait time to enter the queue and its probability, and randomly selecting queue position to fail a job.  The longer the duration, the more stable the predictions tend to be.  The tool computes PR throughput by tracking the number of successful PR moving through the queue over actual execution time (the last iteration may exceed allowed simulation duration).  Average wait time is computed using [Little's Law](https://en.wikipedia.org/wiki/Little%27s_law).
 
 ## Quickstart
 Build the project:
@@ -22,15 +22,15 @@ Build the project:
 poetry install
 ```
 
-The following shows an example of tuning the queue size to determine optimal configuration for sufficient throughput and reduce wait times.
+The following shows an example of tuning the queue size to determine optimal configuration for throughput and wait times.
 
 > [!TIP]  
-> This scenario demonstrates how oversizing the queue can increase wait times for some workloads and increase cost on CI side.
+> This scenario demonstrates how oversizing the queue can increase wait times and cost of CI resources.
 
 **Simulation 1:** Run a simulation with the following parameters to get a baseline:
 - queue size of `5`
 - each job takes `30 minutes` to execute
-- job probability of failure at `10%`
+- job failure probability of `10%`
 - no jobs waiting to enter the queue at any time
 
 ```shell
@@ -48,11 +48,11 @@ poetry run simulate --min-queue-size 5 --max-queue-size 5 --job-duration 30 --fa
   5      | 7.3               | 48.6                  | 30.0                     | 2.7
 ```
 
-**Simulation 2:** Run a second simulation that shrinks the queue size by 2 and puts the 2 jobs into the waiting line with a small probability of that occuring:
+**Simulation 2:** Run a second simulation that shrinks the queue size to 3 and puts 2 jobs into the queue waiting line with a small probability of that occurrence:
 - queue size of `3`
 - each job takes `30 minutes` to execute (same)
-- job probability of failure at `10%` (same)
-- assign `10%` probability of `2` jobs waiting extra time to enter the queue, representing the reduction in the queue size shifted to queue waiting line
+- job failure probability of `10%` (same)
+- `10%` probability of `2` jobs waiting to enter the queue, representing the reduction in the queue size shifted to queue waiting line
 
 ```shell
 poetry run simulate --min-queue-size 3 --max-queue-size 3 --job-duration 30 --failure-probability 0.1 --jobs_waiting_to_enter 2 --jobs_waiting_to_enter_probability 0.1
