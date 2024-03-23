@@ -66,7 +66,10 @@ poetry run simulate --min-queue-size 3 --max-queue-size 3 --job-duration 30 --fa
 ```
 
 > [!NOTE]  
-> There is an expected reduction in throughput due to smaller queue size.  However, there's also a significant drop in the average wait time.  The median number staying the same suggests most workloads are not impacted but few workloads are likely to see an improvement in waiting times.  There's also a significat drop in lost PRs which reduces cost in the CI system.
+> - There is an expected reduction in throughput due to smaller queue size.
+> - There's also a significant drop in the average wait time.
+> - The median number staying the same suggests most workloads are not impacted but few workloads are likely to see an improvement in wait times.
+> - There's a significat drop in lost PRs which reduces cost in the CI system.
 
 ## How GitHub merge queue works
 GitHub merge queue uses optimistic concurrency method to optimize for throughput.  The best way to understand how this works is to visualize a scenario where a queue is building multiple jobs at the same time and a failure occurs in the middle of the queue.  Let's consider a scenario with 3 PRs:
