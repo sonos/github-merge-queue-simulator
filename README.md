@@ -114,7 +114,7 @@ block-beta
   end
   block:group2
     columns 2
-    c["PR2"] d["commit A + commit C"]
+    c["PR3"] d["commit A + commit C"]
   end
 ```
 
