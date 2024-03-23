@@ -18,30 +18,55 @@ Build the project:
 poetry install
 ```
 
-Run a simulation representing 250 hours of job executions, using queue sizes ranging from 5 to 10, where each job takes 30 minutes to execute, with a failure rate of 10%.
+The following shows an example of tuning the queue size to determine optimal configuration for sufficient throughput and reduce wait times.
+
+> [!TIP]  
+> This scenario demonstrates how oversizing the queue can increase wait times for some workloads and increase cost on CI side.
+
+**Simulation 1:** Run a simulation with the following parameters to get a baseline:
+- queue size of `5`
+- each job takes `30 minutes` to execute
+- job probability of failure at `10%`
+- no jobs waiting to enter the queue at any time
+
 ```shell
-poetry run simulate --sim-duration 250 --min-queue-size 5 --max-queue-size 10 --job-duration 30 --failure-rate 0.1
+poetry run simulate --min-queue-size 5 --max-queue-size 5 --job-duration 30 --failure-probability 0.1
 ```
 ```
-  Simulation duration: 250h
-  Job duration: 30m
-  Failure rate: 0.1
+  Job duration : 30m
+  Job failure probability : 0.1
+  Jobs waiting to enter the queue probability : 0
+  Jobs waiting to enter the queue : 0
+  Simulation duration : 10000h
   
-  Q Size | Throughput (PR/h) | Avg Time to Merge (m) | Median Time to Merge (m)
-  -------|-------------------|-----------------------|-------------------------
-  5      | 7.4               | 48.0                  | 30.0                   
-  6      | 8.2               | 55.0                  | 30.0                   
-  7      | 9.5               | 60.2                  | 30.0                   
-  8      | 10.1              | 68.7                  | 34.3                   
-  9      | 10.9              | 75.7                  | 45.0                   
-  10     | 12.1              | 82.7                  | 42.9
+  Q Size | Throughput (PR/h) | Avg Time to Merge (m) | Median Time to Merge (m) | PRs Lost (PR/h)
+  -------|-------------------|-----------------------|--------------------------|-----------------
+  5      | 7.3               | 48.6                  | 30.0                     | 2.7
 ```
 
-## Assumptions
-The simulator makes a few assumptions.
+**Simulation 2:** Run a second simulation that shrinks the queue size by 2 and puts the 2 jobs into the waiting line with a small probability of that occuring:
+- queue size of `3`
+- each job takes `30 minutes` to execute (same)
+- job probability of failure at `10%` (same)
+- assign `10%` probability of `2` jobs waiting extra time to enter the queue, representing the reduction in the queue size shifted to queue waiting line
 
-- The queue is always full.
-- Delays associated with manual re-submissions when a PR is rejected are not taken into account.
+```shell
+poetry run simulate --min-queue-size 3 --max-queue-size 3 --job-duration 30 --failure-probability 0.1 --jobs_waiting_to_enter 2 --jobs_waiting_to_enter_probability 0.1
+```
+```
+  Job duration : 30m
+  Job failure probability : 0.1
+  Jobs waiting to enter the queue probability : 0.1
+  Jobs waiting to enter the queue : 2
+  Simulation duration : 10000h
+  
+  Q Size | Throughput (PR/h) | Avg Time to Merge (m) | Median Time to Merge (m) | PRs Lost (PR/h)
+  -------|-------------------|-----------------------|--------------------------|-----------------
+  3      | 4.9               | 40.0                  | 30.0                     | 1.1
+```
+
+> [!NOTE]  
+> There is an expected reduction in throughput due to smaller queue size.  However, there's also a significant drop in the average wait time.  The median number staying the same suggests most workloads are not impacted but few workloads are likely to see an improvement in waiting times.  There's also a significat drop in lost PRs which reduces cost in the CI system.
 
 ## How GitHub merge queue works
 GitHub merge queue uses optimistic concurrency method to optimize for throughput.  The best way to understand how this works is to visualize a scenario where a queue is building multiple jobs at the same time and a failure occurs in the middle of the queue.  Let's consider a scenario with 3 PRs:
