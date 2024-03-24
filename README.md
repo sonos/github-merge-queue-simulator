@@ -76,7 +76,7 @@ poetry run simulate --min-queue-size 3 --max-queue-size 3 --job-duration 30 --fa
 > - There's a significat drop in lost PRs which reduces cost in the CI system.
 
 ## How GitHub merge queue works
-GitHub merge queue uses optimistic concurrency model.  The best way to understand how it works is to visualize a scenario where a queue is building multiple jobs and a failure occurs in the middle of the queue.  Let's consider a scenario with 3 PRs:
+GitHub merge queue uses an optimistic concurrency model.  The best way to understand how it works is to visualize a scenario where a queue is building multiple jobs and a failure occurs in the middle of the queue.  Let's consider a scenario with 3 PRs:
 - `PR1` builds commit `A` which is its head commit.
 - `PR2` builds commit `B`, and it includes `PR1`'s commit `A` anticipating `PR1` build success.
 - `PR3` builds all commits `A` `B` and `C`.
