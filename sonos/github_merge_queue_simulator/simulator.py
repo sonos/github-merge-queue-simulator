@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def simulate_throughput(queue_size: int, sim_duration: int, job_duration: int, failure_probability: float,
-                        jobs_waiting_to_enter: int = 0, jobs_waiting_to_enter_probability: float = 0) -> float:
+                        jobs_waiting_to_enter: int = 0, jobs_waiting_to_enter_probability: float = 0) -> tuple:
     """Compute the throughput of a queue given various parameters.
     
     Args:
