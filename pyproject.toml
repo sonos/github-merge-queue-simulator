@@ -2,7 +2,7 @@
 name = "github-merge-queue-simulator"
 version = "0.1.0"
 description = "GitHub merge queue simulator."
-authors = ["Michal Szelag <michal.szelag@sonos.com>"]
+authors = ["Michal Szelag"]
 
 packages = [
     { include = "sonos" }
